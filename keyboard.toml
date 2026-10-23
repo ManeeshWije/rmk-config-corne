@@ -2,7 +2,7 @@
 # Hardware source: https://github.com/qmk/qmk_firmware/blob/master/keyboards/crkbd/rev4_1/info.json
 # Layout follows physical left-to-right order; the right matrix columns are reversed.
 [keyboard]
-name = "Corne 4.1"
+name = "corne-4-1"
 product_name = "Corne 4.1 RMK"
 vendor_id = 0x4c4b
 product_id = 0x4643
