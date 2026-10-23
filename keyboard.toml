@@ -1,46 +1,96 @@
-# Documentation: https://rmk.rs/docs/configuration/
+# Corne 4.1 standard (46 keys), left half is USB central.
+# Hardware source: https://github.com/qmk/qmk_firmware/blob/master/keyboards/crkbd/rev4_1/info.json
+# Layout follows physical left-to-right order; the right matrix columns are reversed.
 [keyboard]
-name = "RMK Keyboard"
-product_name = "RMK Keyboard"
+name = "Corne 4.1"
+product_name = "Corne 4.1 RMK"
 vendor_id = 0x4c4b
 product_id = 0x4643
-manufacturer = "RMK"
+manufacturer = "foostan"
 chip = "rp2040"
 
-[matrix]
-# Row and col pins are mandatory
-row_pins = ["PIN_6", "PIN_7", "PIN_8", "PIN_9"]
-col_pins = ["PIN_19", "PIN_20", "PIN_21"]
-# RMK uses col2row as the default matrix diode direction, if you want to use a row2col matrix, add `row2col = true`
-# row2col = true
-
 [layout]
-rows = 4
-cols = 3
+rows = 8
+cols = 7
 map = """
-(0,0)  (0,1)  (0,2)
-(1,0)  (1,1)  (1,2)
-(2,0)  (2,1)  (2,2)
-(3,0)  (3,1)  (3,2)
+(0,0) (0,1) (0,2) (0,3) (0,4) (0,5) (0,6) (4,6) (4,5) (4,4) (4,3) (4,2) (4,1) (4,0)
+(1,0) (1,1) (1,2) (1,3) (1,4) (1,5) (1,6) (5,6) (5,5) (5,4) (5,3) (5,2) (5,1) (5,0)
+(2,0) (2,1) (2,2) (2,3) (2,4) (2,5) (6,5) (6,4) (6,3) (6,2) (6,1) (6,0)
+(3,3) (3,4) (3,5) (7,5) (7,4) (7,3)
 """
 
 [keymap]
-# One more layer than is defined below: the keymap references layer 2
-# (LT(2, ...), TG(2)), which stays empty until the user fills it in.
 layers = 3
 
-[[keymap.layer]] # layer 0
+[[keymap.layer]]
+name = "Base"
 keys = """
-A       B           C
-Kc1     Kc2         Kc3
-LCtrl   MO(1)       LShift
-OSL(1)  LT(2, Kc9)  LM(1, LShift | LGui)
+Tab Q W E R T LAlt RCtrl Y U I O P Escape
+LCtrl A S D F G Tab RShift H J K L Semicolon MT(Quote, LCtrl | LShift | LAlt)
+LShift Z X C V B N M Comma Dot Slash RShift
+MO(1) LGui Space MT(Enter, LAlt) Backspace MO(2)
 """
 
-[[keymap.layer]] # layer 1
+[[keymap.layer]]
+name = "Lower"
 keys = """
-_  TT(1)  TG(2)
-_  _      _
-_  _      _
-_  _      _
+_ WM(Kc1,LShift) WM(Kc2,LShift) WM(Kc3,LShift) WM(Kc4,LShift) WM(Kc5,LShift) _ _ WM(Kc6,LShift) WM(Kc7,LShift) KpAsterisk WM(Kc9,LShift) WM(Kc0,LShift) Backslash
+_ Kc1 Kc2 Kc3 Kc4 Kc5 _ _ Minus Equal Grave LeftBracket RightBracket WM(Backslash,LShift)
+LShift Kc6 Kc7 Kc8 Kc9 Kc0 WM(Minus,LShift) WM(Equal,LShift) WM(Grave,LShift) WM(LeftBracket,LShift) WM(RightBracket,LShift) RShift
+_ LGui Space MT(Enter,LAlt) Backspace _
 """
+
+[[keymap.layer]]
+name = "Raise"
+keys = """
+_ F1 F2 F3 F4 F5 _ _ F6 F7 F8 F9 F10 _
+_ MediaPrevTrack MediaNextTrack AudioVolDown AudioVolUp MediaPlayPause _ _ Left Down Up Right _ _
+No No No No No No _ _ _ _ _ _
+BrightnessDown BrightnessUp _ _ _ _
+"""
+
+[behavior.morse]
+enable_flow_tap = false
+normal_mode = true
+unilateral_tap = false
+hold_timeout = "150ms"
+quick_tap_timeout = "0ms"
+
+[split]
+connection = "serial"
+
+[split.central]
+rows = 4
+cols = 7
+row_offset = 0
+col_offset = 0
+serial = [{ instance = "PIO0", tx_pin = "PIN_12", rx_pin = "PIN_12" }]
+
+[split.central.matrix]
+matrix_type = "direct_pin"
+direct_pin_low_active = true
+bootmagic = [0, 0]
+direct_pins = [
+    ["PIN_22", "PIN_20", "PIN_23", "PIN_26", "PIN_29", "PIN_0", "PIN_4"],
+    ["PIN_19", "PIN_18", "PIN_24", "PIN_27", "PIN_1", "PIN_2", "PIN_8"],
+    ["PIN_17", "PIN_16", "PIN_25", "PIN_28", "PIN_3", "PIN_9", "_"],
+    ["_", "_", "_", "PIN_14", "PIN_15", "PIN_11", "_"],
+]
+
+[[split.peripheral]]
+rows = 4
+cols = 7
+row_offset = 4
+col_offset = 0
+serial = [{ instance = "PIO0", tx_pin = "PIN_12", rx_pin = "PIN_12" }]
+
+[split.peripheral.matrix]
+matrix_type = "direct_pin"
+direct_pin_low_active = true
+bootmagic = [0, 0]
+direct_pins = [
+    ["PIN_8", "PIN_9", "PIN_3", "PIN_2", "PIN_1", "PIN_27", "PIN_25"],
+    ["PIN_11", "PIN_14", "PIN_4", "PIN_0", "PIN_28", "PIN_26", "PIN_23"],
+    ["PIN_15", "PIN_18", "PIN_5", "PIN_29", "PIN_20", "PIN_22", "_"],
+    ["_", "_", "_", "PIN_16", "PIN_17", "PIN_19", "_"],
+]
