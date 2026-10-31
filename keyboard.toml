@@ -53,7 +53,7 @@ BrightnessDown BrightnessUp _ _ _ _
 enable_flow_tap = false
 normal_mode = true
 unilateral_tap = false
-hold_timeout = "150ms"
+hold_timeout = "100ms"
 quick_tap_timeout = "0ms"
 
 [split]
